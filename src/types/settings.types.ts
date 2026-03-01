@@ -2,6 +2,9 @@ export interface SavedPrompt {
   id: string;
   title: string;
   content: string;
+  description?: string;
+  systemPrompt?: string;
+  icon?: string;
 }
 
 export interface UserSettings {

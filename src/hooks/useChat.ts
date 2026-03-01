@@ -70,16 +70,19 @@ export function useChat() {
       content: m.content
     }));
 
-    if (parameters.systemPrompt) {
-      messagesHistory.unshift({ role: 'system', content: parameters.systemPrompt });
+    // Fetch freshest parameters to avoid React closure race-conditions from WelcomeScreen rapid clicks
+    const currentParams = useModelStore.getState().parameters;
+
+    if (currentParams.systemPrompt) {
+      messagesHistory.unshift({ role: 'system', content: currentParams.systemPrompt });
     }
 
     const req: ChatRequestDto = {
       model: selectedModel.alias,
       provider: selectedModel.provider !== 'openai' ? selectedModel.provider : undefined,
       messages: messagesHistory,
-      temperature: parameters.temperature,
-      maxTokens: parameters.maxTokens,
+      temperature: currentParams.temperature,
+      maxTokens: currentParams.maxTokens,
     };
 
     const abortCtrl = new AbortController();
