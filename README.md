@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/Venumadhavmule.png" alt="LLMate Chat Logo" width="120" />
+  <!-- <img src="https://github.com/Venumadhavmule.png" alt="LLMate Chat Logo" width="120" /> -->
   <h1>LLMate Chat</h1>
   <p><strong>A highly advanced, beautifully crafted React client engineered to connect seamlessly with the LLMate AI Gateway.</strong></p>
 </div>
