@@ -1,73 +1,73 @@
-# React + TypeScript + Vite
+# LLMate Chat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+LLMate Chat is a beautifully crafted, highly responsive React client designed to connect seamlessly with the LLMate AI Gateway. It provides a robust, modern chat interface supporting real-time streaming, dynamic system prompt templating, capability-based model selection, and an aesthetically pleasing UI.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Modern & Beautiful UI/UX**: Built with Tailwind CSS and Framer Motion for smooth, dynamic animations, glassmorphism panels, and pristine typography.
+- **Theme Awareness**: Native support for both deep Dark Mode and clean Light Mode, with intelligent CSS variables syncing seamlessly to Tailwind classes.
+- **Real-Time Streaming**: Custom-built Server-Sent Events (SSE) parsing to handle extremely fast backend AI streaming without chunking glitches.
+- **Dynamic System Prompts**: Go beyond simple system contexts—utilize our "Suggested Prompts" to instantly inject highly specialized, rigorous background constraints (e.g., Code Writer, Concept Explainer) directly into the LLM's brain.
+- **Advanced Model Selector**: Intelligently switch between Google Gemini, OpenAI, Anthropic, Groq, and local Ollama models with capability-based filtering (Vision, Chat, Reasoning).
+- **Flawless Markdown Rendering**: Syntax highlighting, copy-to-clipboard functionality, and native Markdown structural support. 
 
-## React Compiler
+## 🛠 Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Framework**: [React 18](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS v3](https://tailwindcss.com/) + Custom CSS Variables
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Data Fetching**: [React Query](https://tanstack.com/query/latest)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Markdown**: `react-markdown`, `remark-gfm`, `rehype-highlight`
 
-## Expanding the ESLint configuration
+## 🚀 Quick Start
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Ensure you have [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/) installed.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Install Dependencies**
+   \`\`\`bash
+   pnpm install
+   \`\`\`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2. **Environment Configuration**
+   Copy the example environment file and adjust if your backend is running on a different port:
+   \`\`\`bash
+   cp .env.example .env
+   # Default API URL is http://localhost:8080 (LLMate backend)
+   \`\`\`
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3. **Start the Development Server**
+   \`\`\`bash
+   pnpm run dev
+   \`\`\`
+   The application will be available at \`http://localhost:3000\`.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+4. **Build for Production**
+   \`\`\`bash
+   pnpm run build
+   \`\`\`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📂 Architecture Overview
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+\`\`\`
+src/
+├── api/             # API client services, strict DTO type definitions, and raw streaming parsers
+├── components/      # Reusable React components
+│   ├── chat/        # Message bubbles, Markdown renderer, Input area
+│   ├── layout/      # AppShell, MainPanel, Sidebar
+│   ├── model-selector/ # Capability filters, parameter adjustments
+│   ├── ui/          # Primitive building blocks (Buttons, Dropdowns, GlassPanels)
+│   └── welcome/     # Custom template grid and hero orb animations
+├── config/          # Static configurations (models, specialized prompt templates)
+├── hooks/           # Custom React hooks (useChat, useKeyboardShortcuts)
+├── store/           # Zustand persistent stores (Model state, Chat history, UI preferences)
+├── styles/          # Global CSS, theme variables, and custom keyframe animations
+└── types/           # Global TypeScript interfaces
+\`\`\`
+
+## 🧠 The "Brain Prompt" Architecture
+
+LLMate Chat doesn't rely solely on user input. It utilizes a highly rigorous default **System Prompt** designed to enforce technical perfection, mandate standard list formatting, prevent emoji usage, and proactively instruct the AI to ask follow-up questions if it lacks context. 
+
+When users select a "Suggested Template" from the Welcome screen, the UI intelligently swaps the global system context to a specialized prompt variant tailored specifically for tasks like Fact-Checking, Code Compilation, or Creative Brainstorming—ensuring the AI adopts the exact persona needed for the task before the user even types their first character.
