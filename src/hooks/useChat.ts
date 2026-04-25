@@ -92,15 +92,37 @@ export function useChat() {
     const startTime = Date.now();
 
     try {
+      // Clear template ID so it doesn't stick permanently to the parameters
+      useModelStore.getState().setActiveTemplateId(null);
+
       if (parameters.stream) {
         updateMessage(convId, assistantMsgId, { status: 'streaming' });
 
         let accumulatedText = '';
+        let currentProvider = req.provider || 'auto';
+        let currentModel = req.model;
+
         await chatApi.chatStream(
           req,
-          (delta) => {
-            accumulatedText += delta;
-            updateMessage(convId, assistantMsgId, { content: accumulatedText });
+          (chunk) => {
+            if (chunk.delta) {
+              accumulatedText += chunk.delta;
+            }
+            
+            const metadata: any = {};
+            if (chunk.provider) currentProvider = chunk.provider;
+            if (chunk.model) currentModel = chunk.model;
+            
+            if (chunk.providerOptions?.fallback_notice) {
+              metadata.fallbackNotice = chunk.providerOptions.fallback_notice;
+            }
+
+            updateMessage(convId, assistantMsgId, { 
+              content: accumulatedText,
+              provider: currentProvider,
+              model: currentModel,
+              ...metadata
+            });
           },
           abortCtrl.signal
         );
@@ -125,13 +147,19 @@ export function useChat() {
           latencyMs: Date.now() - startTime
         });
       } else {
-        console.error('Chat error:', err);
-        const errMsg = err.error || err.message || 'Unknown error occurred';
+        console.error('[useChat] Error occurred:', err);
+        let errMsg = err.error || err.message || 'Unknown error occurred';
+        
+        // Specifically detect network/CORS issues
+        if (errMsg === 'Failed to fetch') {
+          errMsg = 'Network Error: Could not connect to the backend server. Please check if the server is running and CORS is allowed.';
+        }
+        
         setError(errMsg);
         updateMessage(convId, assistantMsgId, {
           status: 'error',
           error: errMsg,
-          content: 'I encountered an error while trying to process your request.'
+          content: 'I encountered an error while trying to process your request. Check console logs for details.'
         });
       }
     } finally {

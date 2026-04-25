@@ -1,11 +1,18 @@
+import { useNavigate } from 'react-router-dom';
 import { useChatStore, useModelStore, useUIStore } from '../../store';
 import { Button } from '../ui/Button';
 import { LuPlus as Plus, LuPanelLeftClose as PanelLeftClose, LuPanelLeftOpen as PanelLeftOpen, LuBrainCircuit as BrainCircuit } from 'react-icons/lu';
 
 export function SidebarHeader() {
+  const navigate = useNavigate();
   const { createConversation } = useChatStore();
   const { selectedModel } = useModelStore();
   const { isSidebarOpen, toggleSidebar } = useUIStore();
+
+  const handleNewChat = () => {
+    const id = createConversation(selectedModel.alias, selectedModel.provider);
+    navigate(`/chat/${id}`);
+  };
 
   return (
     <div className={`flex flex-col gap-4 border-b border-[var(--color-border)] shrink-0 ${isSidebarOpen ? 'p-4' : 'p-4 items-center'}`}>
@@ -31,7 +38,7 @@ export function SidebarHeader() {
 
       <Button
         className={`shadow-none border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-border)] text-[var(--color-text)] ${isSidebarOpen ? 'w-full justify-start gap-2 h-10' : 'w-10 h-10 p-0 justify-center'}`}
-        onClick={() => createConversation(selectedModel.alias, selectedModel.provider)}
+        onClick={handleNewChat}
         title="New Chat"
       >
         <Plus size={16} />

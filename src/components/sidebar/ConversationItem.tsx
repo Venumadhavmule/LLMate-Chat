@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Conversation } from '../../types/chat.types';
 import { useChatStore } from '../../store';
 import { cn } from '../../utils/cn';
@@ -16,13 +17,14 @@ interface Props {
 }
 
 export const ConversationItem = React.memo(({ conversation }: Props) => {
+  const navigate = useNavigate();
   const { activeConversationId, setActiveConversation, deleteConversation, pinConversation } = useChatStore();
 
   const isActive = activeConversationId === conversation.id;
 
   return (
     <div
-      onClick={() => setActiveConversation(conversation.id)}
+      onClick={() => navigate(`/chat/${conversation.id}`)}
       className={cn(
         "group flex items-center justify-between px-3 py-2 mt-1 rounded-md cursor-pointer transition-colors text-sm",
         isActive

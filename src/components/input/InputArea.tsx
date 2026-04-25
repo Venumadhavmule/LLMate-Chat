@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { GlassPanel } from '../ui/GlassPanel';
 import { AttachButton } from './AttachButton';
 import { VoiceButton } from './VoiceButton';
@@ -11,14 +11,35 @@ import { FileDropZone } from './FileDropZone';
 
 export function InputArea() {
   const [input, setInput] = useState('');
+  const [liveTranscript, setLiveTranscript] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { pendingAttachments, isGenerating } = useUIStore();
+  const { pendingAttachments, isGenerating, pendingTemplateText, setPendingTemplateText } = useUIStore();
   const { selectedModel } = useModelStore();
   const { processFiles } = useFileUpload();
   const { sendMessage } = useChat();
 
+  useEffect(() => {
+    if (pendingTemplateText !== null) {
+      setInput(pendingTemplateText);
+      setPendingTemplateText(null);
+      
+      // Auto-focus and adjust height
+      if (textareaRef.current) {
+        textareaRef.current.focus();
+        setTimeout(() => {
+          if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+            textareaRef.current.setSelectionRange(pendingTemplateText.length, pendingTemplateText.length);
+          }
+        }, 0);
+      }
+    }
+  }, [pendingTemplateText, setPendingTemplateText]);
+
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
+    setLiveTranscript(''); // Clear live transcript if user manually edits
 
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -26,10 +47,18 @@ export function InputArea() {
     }
   };
 
+  useEffect(() => {
+    if (liveTranscript && textareaRef.current) {
+      textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+    }
+  }, [liveTranscript]);
+
   const submit = () => {
-    if ((input.trim() || pendingAttachments.length > 0) && !isGenerating) {
-      sendMessage(input);
+    if ((input.trim() || pendingAttachments.length > 0 || liveTranscript.trim()) && !isGenerating) {
+      const finalMessage = (input + (liveTranscript ? (input ? ' ' : '') + liveTranscript : '')).trim();
+      sendMessage(finalMessage);
       setInput('');
+      setLiveTranscript('');
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
         textareaRef.current.focus();
@@ -50,7 +79,7 @@ export function InputArea() {
     }
   };
 
-  const hasContent = input.trim().length > 0 || pendingAttachments.length > 0;
+  const hasContent = input.trim().length > 0 || pendingAttachments.length > 0 || liveTranscript.length > 0;
 
   return (
     <div className="relative w-full z-10">
@@ -76,7 +105,7 @@ export function InputArea() {
             <textarea
               id="chat-message-input"
               ref={textareaRef}
-              value={input}
+              value={input + (liveTranscript ? (input ? ' ' : '') + liveTranscript : '')}
               onChange={handleInput}
               onKeyDown={handleKeyDown}
               onPaste={handlePaste}
@@ -86,7 +115,13 @@ export function InputArea() {
             />
 
             <div className="flex items-center gap-1 p-1 pb-1">
-              <VoiceButton />
+              <VoiceButton 
+                onTextEntry={(text) => {
+                  setInput(prev => (prev + ' ' + text).trim());
+                  setLiveTranscript('');
+                }} 
+                onLiveUpdate={(text) => setLiveTranscript(text)}
+              />
               <SendButton onSend={submit} disabled={!hasContent && !isGenerating} />
             </div>
           </div>

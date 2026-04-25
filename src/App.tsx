@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppShell } from './components/layout/AppShell';
 import { Toaster } from 'react-hot-toast';
@@ -20,16 +21,18 @@ export function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppShell />
-      <SettingsModal />
-      <ExportModal />
-      <Toaster position="bottom-right" toastOptions={{
-        style: {
-          background: 'var(--color-surface)',
-          color: 'var(--color-text)',
-          border: '1px solid var(--color-border)',
-        }
-      }} />
+      <BrowserRouter>
+        <AppShell />
+        <SettingsModal />
+        <ExportModal />
+        <Toaster position="bottom-right" toastOptions={{
+          style: {
+            background: 'var(--color-surface)',
+            color: 'var(--color-text)',
+            border: '1px solid var(--color-border)',
+          }
+        }} />
+      </BrowserRouter>
     </QueryClientProvider>
   );
 }

@@ -29,6 +29,7 @@ export interface StreamChunk {
   done?: boolean;
   provider?: string;
   model?: string;
+  providerOptions?: Record<string, any>;
 }
 
 export interface EmbeddingRequestDto {

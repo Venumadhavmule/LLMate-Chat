@@ -29,6 +29,7 @@ export interface Message {
   latencyMs?: number;
   createdAt: number;      // Unix timestamp ms
   error?: string;
+  fallbackNotice?: string;
 }
 
 export interface Conversation {

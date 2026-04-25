@@ -10,6 +10,7 @@ interface UIState {
   pendingAttachments: Attachment[];
   isGenerating: boolean;
   abortController: AbortController | null;
+  pendingTemplateText: string | null;
 
   toggleSidebar: () => void;
   setSidebarWidth: (width: number) => void;
@@ -22,6 +23,7 @@ interface UIState {
   clearAttachments: () => void;
   setGenerating: (bool: boolean) => void;
   setAbortController: (ctrl: AbortController | null) => void;
+  setPendingTemplateText: (text: string | null) => void;
   stopGeneration: () => void;
 }
 
@@ -34,6 +36,7 @@ export const useUIStore = create<UIState>((set, get) => ({
   pendingAttachments: [],
   isGenerating: false,
   abortController: null,
+  pendingTemplateText: null,
 
   toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
   setSidebarWidth: (width) => set({ sidebarWidth: width }),
@@ -46,6 +49,7 @@ export const useUIStore = create<UIState>((set, get) => ({
   clearAttachments: () => set({ pendingAttachments: [] }),
   setGenerating: (bool) => set({ isGenerating: bool }),
   setAbortController: (ctrl) => set({ abortController: ctrl }),
+  setPendingTemplateText: (text) => set({ pendingTemplateText: text }),
   stopGeneration: () => {
     const ctrl = get().abortController;
     if (ctrl) {

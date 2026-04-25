@@ -3,13 +3,29 @@ import { useVoiceInput } from '../../hooks/useVoiceInput';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../ui/Tooltip';
 import { cn } from '../../utils/cn';
 
-export function VoiceButton() {
+interface VoiceButtonProps {
+  onTextEntry?: (text: string) => void;
+  onLiveUpdate?: (text: string) => void;
+}
+
+export function VoiceButton({ onTextEntry, onLiveUpdate }: VoiceButtonProps) {
   const { isListening, startListening, stopListening, isSupported } = useVoiceInput({
-    onTextEntry: (t) => {
-      const textarea = document.getElementById('chat-message-input') as HTMLTextAreaElement;
-      if (textarea) {
-        textarea.value = (textarea.value + ' ' + t).trim();
-        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    onTextEntry: (t, isFinal) => {
+      if (isFinal) {
+        if (onTextEntry) {
+          onTextEntry(t);
+        } else {
+          // Fallback to DOM for legacy if not provided
+          const textarea = document.getElementById('chat-message-input') as HTMLTextAreaElement;
+          if (textarea) {
+            textarea.value = (textarea.value + ' ' + t).trim();
+            textarea.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+        }
+      } else {
+        if (onLiveUpdate) {
+          onLiveUpdate(t);
+        }
       }
     }
   });

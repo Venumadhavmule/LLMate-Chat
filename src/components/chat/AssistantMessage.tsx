@@ -4,7 +4,7 @@ import { MarkdownRenderer } from './MarkdownRenderer';
 import { MessageActions } from './MessageActions';
 import { UsageBadge } from './UsageBadge';
 import { StreamingIndicator } from './StreamingIndicator';
-import { LuBot as Bot, LuTriangleAlert as AlertTriangle } from 'react-icons/lu';
+import { LuBot as Bot, LuTriangleAlert as AlertTriangle, LuInfo } from 'react-icons/lu';
 import { cn } from '../../utils/cn';
 
 interface Props {
@@ -72,6 +72,13 @@ export function AssistantMessage({ message, isStreaming, onRegenerate }: Props) 
             {isError && (
               <div className="mt-2 text-xs text-[var(--color-error)] border border-[var(--color-error)]/30 bg-[var(--color-error)]/10 rounded-md p-2">
                 There was an error generating the response. Please try again.
+              </div>
+            )}
+
+            {message.fallbackNotice && !isError && (
+              <div className="mt-2 text-[10px] text-[var(--color-text-muted)] border border-[var(--color-border)] bg-[var(--color-surface)]/30 rounded px-2 py-1 flex items-center gap-1.5 w-fit">
+                <LuInfo size={12} className="text-violet-400" />
+                {message.fallbackNotice}
               </div>
             )}
           </div>

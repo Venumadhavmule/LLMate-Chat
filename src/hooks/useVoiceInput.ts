@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useSettingsStore } from '../store';
 
 interface VoiceInputOptions {
-  onTextEntry?: (text: string) => void;
+  onTextEntry?: (text: string, isFinal: boolean) => void;
 }
 
 export function useVoiceInput(options?: VoiceInputOptions) {
@@ -35,8 +35,10 @@ export function useVoiceInput(options?: VoiceInputOptions) {
         currentTranscript += event.results[i][0].transcript;
       }
       setTranscript(currentTranscript);
-      if (options?.onTextEntry && event.results[event.results.length - 1].isFinal) {
-        options.onTextEntry(event.results[event.results.length - 1][0].transcript);
+      
+      if (options?.onTextEntry) {
+        const lastResult = event.results[event.results.length - 1];
+        options.onTextEntry(currentTranscript, lastResult.isFinal);
       }
     };
 

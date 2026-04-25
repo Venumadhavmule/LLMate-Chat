@@ -4,6 +4,8 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/atom-one-dark.css';
 import { cn } from '../../utils/cn';
+import { useSettingsStore } from '../../store';
+import { LuCopy as Copy, LuCheck as Check, LuSun as Sun, LuMoon as Moon } from 'react-icons/lu';
 
 interface Props {
   content: string;
@@ -11,6 +13,15 @@ interface Props {
 }
 
 export const MarkdownRenderer = React.memo(({ content, className }: Props) => {
+  const { codeTheme, setCodeTheme } = useSettingsStore();
+  const [copiedId, setCopiedId] = React.useState<string | null>(null);
+
+  const handleCopy = (value: string, id: string) => {
+    navigator.clipboard.writeText(value);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   return (
     <div className={cn("prose dark:prose-invert max-w-none w-full break-words prose-p:leading-relaxed", className)}>
       <ReactMarkdown
@@ -20,23 +31,62 @@ export const MarkdownRenderer = React.memo(({ content, className }: Props) => {
           code({ node, inline, className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
-            const value = String(children).replace(/\n$/, '');
+            
+            // Fix: Correctly extract text content from children to avoid [object Object]
+            const extractText = (child: any): string => {
+              if (typeof child === 'string') return child;
+              if (Array.isArray(child)) return child.map(extractText).join('');
+              if (child?.props?.children) return extractText(child.props.children);
+              return '';
+            };
+            const value = extractText(children).replace(/\n$/, '');
+            const id = React.useId();
 
             if (!inline && match) {
+              const isDark = codeTheme === 'dark';
+              
               return (
-                <div className="relative group rounded-[var(--radius-md)] overflow-hidden my-4 border border-[#404040] bg-[#1e1e1e]">
-                  <div className="flex items-center justify-between px-3 py-1 bg-[#2d2d2d] border-b border-[#404040]">
-                    <span className="text-xs font-mono text-[var(--color-text-muted)] lowercase">{language}</span>
-                    <button
-                      onClick={() => navigator.clipboard.writeText(value)}
-                      className="text-[var(--color-text-muted)] hover:text-white transition-colors p-1"
-                      title="Copy code"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
+                <div className={cn(
+                  "relative group rounded-[var(--radius-md)] overflow-hidden my-4 border border-[var(--color-border)] transition-colors duration-200",
+                  isDark ? "bg-[#1e1e1e]" : "bg-[#f8fafc]"
+                )}>
+                  <div className={cn(
+                    "flex items-center justify-between px-3 py-1.5 border-b border-[var(--color-border)] transition-colors duration-200",
+                    isDark ? "bg-[#2d2d2d]" : "bg-[#f1f5f9]"
+                  )}>
+                    <span className={cn(
+                      "text-[10px] font-bold uppercase tracking-wider",
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    )}>{language || 'code'}</span>
+                    
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setCodeTheme(isDark ? 'light' : 'dark')}
+                        className={cn(
+                          "transition-colors p-1 rounded hover:bg-black/10",
+                          isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-900"
+                        )}
+                        title={isDark ? "Switch to Light Code Theme" : "Switch to Dark Code Theme"}
+                      >
+                        {isDark ? <Sun size={14} /> : <Moon size={14} />}
+                      </button>
+                      <button
+                        onClick={() => handleCopy(value, id)}
+                        className={cn(
+                          "transition-colors p-1 rounded hover:bg-black/10",
+                          isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-900"
+                        )}
+                        title="Copy code"
+                      >
+                        {copiedId === id ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+                      </button>
+                    </div>
                   </div>
-                  <pre className="!m-0 !p-4 !bg-transparent text-[13px] overflow-x-auto">
-                    <code className={className} {...props}>
+                  <pre className={cn(
+                    "!m-0 !p-4 !bg-transparent text-[13px] overflow-x-auto font-mono leading-relaxed",
+                    !isDark && "text-gray-800"
+                  )}>
+                    <code className={cn(className, !isDark && "hljs-light")} {...props}>
                       {children}
                     </code>
                   </pre>

@@ -1,21 +1,18 @@
 import { HeroOrb } from './HeroOrb';
 import { GreetingText } from './GreetingText';
 import { SuggestedPromptGrid } from './SuggestedPromptGrid';
-import { useModelStore } from '../../store';
+import { useModelStore, useUIStore } from '../../store';
 import type { SavedPrompt } from '../../types/settings.types';
 
 export function WelcomeScreen() {
   const setParameters = useModelStore((state) => state.setParameters);
+  const setActiveTemplateId = useModelStore((state) => state.setActiveTemplateId);
+  const setPendingTemplateText = useUIStore((state) => state.setPendingTemplateText);
 
   const handleSelectPrompt = (prompt: SavedPrompt) => {
-    const text = prompt.content;
-    const textarea = document.getElementById('chat-message-input') as HTMLTextAreaElement;
-    if (textarea) {
-      textarea.value = text;
-      textarea.dispatchEvent(new Event('input', { bubbles: true }));
-      textarea.focus();
-      textarea.setSelectionRange(text.length, text.length);
-    }
+    // Use the store to set the pending text instead of direct DOM manipulation
+    setPendingTemplateText(prompt.content);
+    setActiveTemplateId(prompt.id);
 
     if (prompt.systemPrompt) {
       setParameters({ systemPrompt: prompt.systemPrompt });

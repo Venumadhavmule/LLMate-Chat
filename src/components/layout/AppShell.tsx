@@ -1,3 +1,4 @@
+import { Routes, Route } from 'react-router-dom';
 import { Sidebar } from '../sidebar/Sidebar';
 import { MainPanel } from '../layout/MainPanel';
 import { OrbGlow } from '../ui/OrbGlow';
@@ -23,7 +24,10 @@ export function AppShell() {
         }}
       >
         <Sidebar className="translate-x-0" />
-        <MainPanel />
+        <Routes>
+          <Route path="/" element={<MainPanel />} />
+          <Route path="/chat/:id" element={<MainPanel />} />
+        </Routes>
       </div>
     </div>
   );

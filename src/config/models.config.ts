@@ -15,7 +15,7 @@ const allModelsConfig: ModelConfig[] = [
   {
     id: 'openai-gpt-4o-mini',
     provider: 'openai',
-    displayName: 'GPT',
+    displayName: 'Fast (GPT)',
     alias: 'fast',
     description: 'Affordable and intelligent small model for fast, lightweight tasks',
     contextWindow: 128000,
@@ -73,7 +73,7 @@ const allModelsConfig: ModelConfig[] = [
   {
     id: 'anthropic-claude-3-5-sonnet',
     provider: 'anthropic',
-    displayName: 'Claude',
+    displayName: 'Smart (Claude)',
     alias: 'smart',
     description: 'Most intelligent Claude model',
     contextWindow: 200000,
@@ -84,7 +84,7 @@ const allModelsConfig: ModelConfig[] = [
   {
     id: 'anthropic-claude-3-5-haiku',
     provider: 'anthropic',
-    displayName: 'Claude',
+    displayName: 'Fast (Claude)',
     alias: 'haiku',
     description: 'Fastest Claude model for daily tasks',
     contextWindow: 200000,
@@ -120,7 +120,7 @@ const allModelsConfig: ModelConfig[] = [
   {
     id: 'ollama-llama3-2',
     provider: 'ollama',
-    displayName: 'Llama',
+    displayName: 'Local (Llama)',
     alias: 'local',
     description: 'Meta\'s latest local model',
     contextWindow: 8192,
@@ -146,7 +146,7 @@ const allModelsConfig: ModelConfig[] = [
   {
     id: 'ollama-mistral',
     provider: 'ollama',
-    displayName: 'Mistral',
+    displayName: 'Smart (Mistral)',
     alias: 'mistral',
     description: 'Efficient and powerful 7B model',
     contextWindow: 32000,
@@ -251,7 +251,7 @@ const allModelsConfig: ModelConfig[] = [
   {
     id: 'google-gemini-2-5-flash-lite',
     provider: 'google',
-    displayName: 'Gemini 2.5 Flash Lite',
+    displayName: 'Fast (Gemini 2.5)',
     alias: 'google/gemini-2.5-flash-lite',
     description: 'Fastest 2.5 multimodal model',
     contextWindow: 1048576,
@@ -263,7 +263,7 @@ const allModelsConfig: ModelConfig[] = [
   {
     id: 'google-gemini-2-0-flash',
     provider: 'google',
-    displayName: 'Gemini 2.0 Flash',
+    displayName: 'Fast (Gemini 2.0)',
     alias: 'google/gemini-2.0-flash',
     description: 'Next gen fast multimodal model',
     contextWindow: 1048576,
@@ -274,7 +274,7 @@ const allModelsConfig: ModelConfig[] = [
   {
     id: 'google-gemini-1-5-pro',
     provider: 'google',
-    displayName: 'Gemini 1.5 Pro',
+    displayName: 'Smart (Gemini 1.5 Pro)',
     alias: 'google/gemini-1.5-pro',
     description: 'Powerful multimodal model with massive context',
     contextWindow: 2000000,

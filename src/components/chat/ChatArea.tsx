@@ -1,10 +1,30 @@
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useChatStore, useUIStore } from '../../store';
 import { WelcomeScreen } from '../welcome/WelcomeScreen';
 import { MessageList } from './MessageList';
 
 export function ChatArea() {
-  const { activeConversationId, conversations } = useChatStore();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { activeConversationId, setActiveConversation, conversations } = useChatStore();
   const { isGenerating } = useUIStore();
+
+  // Sync URL ID to Store
+  useEffect(() => {
+    if (id && id !== activeConversationId) {
+      const exists = conversations.some(c => c.id === id);
+      if (exists) {
+        setActiveConversation(id);
+      } else {
+        navigate('/', { replace: true });
+      }
+    } else if (!id && activeConversationId) {
+      // If we are at root but have an active conversation, clear it in store or stay at root
+      // In this app, root means WelcomeScreen
+      setActiveConversation(null);
+    }
+  }, [id, activeConversationId, conversations, setActiveConversation, navigate]);
 
   const activeConversation = conversations.find(c => c.id === activeConversationId);
   const messages = activeConversation?.messages || [];
@@ -14,7 +34,7 @@ export function ChatArea() {
     console.log('Regenerate', msgId);
   };
 
-  if (!activeConversation || messages.length === 0) {
+  if (!id || !activeConversation || messages.length === 0) {
     return <WelcomeScreen />;
   }
 

@@ -97,3 +97,73 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-dimmed);
 }
+ 
+/* Highlight.js Light Theme Overrides */
+.hljs-light .hljs-comment,
+.hljs-light .hljs-quote {
+  color: #a0a1a7;
+  font-style: italic;
+}
+ 
+.hljs-light .hljs-doctag,
+.hljs-light .hljs-keyword,
+.hljs-light .hljs-formula {
+  color: #a626a4;
+}
+ 
+.hljs-light .hljs-section,
+.hljs-light .hljs-name,
+.hljs-light .hljs-selector-tag,
+.hljs-light .hljs-deletion,
+.hljs-light .hljs-subst {
+  color: #e45649;
+}
+ 
+.hljs-light .hljs-literal {
+  color: #0184a3;
+}
+ 
+.hljs-light .hljs-string,
+.hljs-light .hljs-regexp,
+.hljs-light .hljs-addition,
+.hljs-light .hljs-attribute,
+.hljs-light .hljs-meta-string {
+  color: #50a14f;
+}
+ 
+.hljs-light .hljs-built_in,
+.hljs-light .hljs-class .hljs-title {
+  color: #c18401;
+}
+ 
+.hljs-light .hljs-attr,
+.hljs-light .hljs-variable,
+.hljs-light .hljs-template-variable,
+.hljs-light .hljs-type,
+.hljs-light .hljs-selector-class,
+.hljs-light .hljs-selector-attr,
+.hljs-light .hljs-selector-pseudo,
+.hljs-light .hljs-number {
+  color: #986801;
+}
+ 
+.hljs-light .hljs-symbol,
+.hljs-light .hljs-bullet,
+.hljs-light .hljs-link,
+.hljs-light .hljs-meta,
+.hljs-light .hljs-selector-id,
+.hljs-light .hljs-title {
+  color: #4078f2;
+}
+ 
+.hljs-light .hljs-emphasis {
+  font-style: italic;
+}
+ 
+.hljs-light .hljs-strong {
+  font-weight: bold;
+}
+ 
+.hljs-light .hljs-link {
+  text-decoration: underline;
+}
