@@ -4,6 +4,7 @@ import { Modal, ModalContent } from '../ui/Modal';
 import { GeneralSettings } from './GeneralSettings';
 import { APISettings } from './APISettings';
 import { AppearanceSettings } from './AppearanceSettings';
+import { ShortcutSettings } from './ShortcutSettings';
 import { LuUser as User, LuKey as Key, LuPalette as Palette, LuKeyboard as Keyboard, LuShield as Shield } from 'react-icons/lu';
 import { cn } from '../../utils/cn';
 
@@ -50,9 +51,7 @@ export function SettingsModal() {
             {activeTab === 'general' && <GeneralSettings />}
             {activeTab === 'api' && <APISettings />}
             {activeTab === 'appearance' && <AppearanceSettings />}
-            {activeTab === 'shortcuts' && (
-              <div className="text-[var(--color-text-muted)]">Keyboard shortcuts documentation coming soon.</div>
-            )}
+            {activeTab === 'shortcuts' && <ShortcutSettings />}
             {activeTab === 'privacy' && (
               <div className="text-[var(--color-text-muted)]">Privacy settings coming soon.</div>
             )}

@@ -11,6 +11,7 @@ interface UIState {
   isGenerating: boolean;
   abortController: AbortController | null;
   pendingTemplateText: string | null;
+  showPreview: boolean;
 
   toggleSidebar: () => void;
   setSidebarWidth: (width: number) => void;
@@ -24,6 +25,8 @@ interface UIState {
   setGenerating: (bool: boolean) => void;
   setAbortController: (ctrl: AbortController | null) => void;
   setPendingTemplateText: (text: string | null) => void;
+  togglePreview: () => void;
+  setShowPreview: (bool: boolean) => void;
   stopGeneration: () => void;
 }
 
@@ -37,6 +40,7 @@ export const useUIStore = create<UIState>((set, get) => ({
   isGenerating: false,
   abortController: null,
   pendingTemplateText: null,
+  showPreview: false,
 
   toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
   setSidebarWidth: (width) => set({ sidebarWidth: width }),
@@ -50,6 +54,8 @@ export const useUIStore = create<UIState>((set, get) => ({
   setGenerating: (bool) => set({ isGenerating: bool }),
   setAbortController: (ctrl) => set({ abortController: ctrl }),
   setPendingTemplateText: (text) => set({ pendingTemplateText: text }),
+  togglePreview: () => set((state) => ({ showPreview: !state.showPreview })),
+  setShowPreview: (bool) => set({ showPreview: bool }),
   stopGeneration: () => {
     const ctrl = get().abortController;
     if (ctrl) {

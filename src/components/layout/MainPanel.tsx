@@ -9,9 +9,10 @@ export function MainPanel() {
       <div className="flex-1 overflow-hidden">
         <ChatArea />
       </div>
-      <div className="px-4 pb-4 shrink-0 mx-auto w-full max-w-4xl">
+      <div className="shrink-0 w-full">
         <InputArea />
       </div>
     </div>
   );
 }
+

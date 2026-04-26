@@ -7,6 +7,7 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { SettingsModal } from './components/settings/SettingsModal';
 import { ExportModal } from './components/settings/ExportModal';
 import { useSettingsStore } from './store';
+import { TooltipProvider } from './components/ui/Tooltip';
 
 const queryClient = new QueryClient();
 
@@ -21,18 +22,21 @@ export function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AppShell />
-        <SettingsModal />
-        <ExportModal />
-        <Toaster position="bottom-right" toastOptions={{
-          style: {
-            background: 'var(--color-surface)',
-            color: 'var(--color-text)',
-            border: '1px solid var(--color-border)',
-          }
-        }} />
-      </BrowserRouter>
+      <TooltipProvider>
+        <BrowserRouter>
+          <AppShell />
+          <SettingsModal />
+          <ExportModal />
+          <Toaster position="bottom-right" toastOptions={{
+            style: {
+              background: 'var(--color-surface)',
+              color: 'var(--color-text)',
+              border: '1px solid var(--color-border)',
+            }
+          }} />
+        </BrowserRouter>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }
+

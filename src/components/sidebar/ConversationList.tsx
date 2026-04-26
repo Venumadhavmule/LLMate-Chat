@@ -2,7 +2,13 @@ import { useMemo } from 'react';
 import { useChatStore } from '../../store';
 import { ConversationItem } from './ConversationItem';
 import { isToday, isYesterday, differenceInDays } from 'date-fns';
+import { FixedSizeList as List } from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
 import type { Conversation } from '../../types/chat.types';
+
+type ListItem = 
+  | { type: 'header'; label: string }
+  | { type: 'item'; conversation: Conversation };
 
 export function ConversationList() {
   const { conversations, searchQuery } = useChatStore();
@@ -15,7 +21,7 @@ export function ConversationList() {
     );
   }, [conversations, searchQuery]);
 
-  const groups = useMemo(() => {
+  const flattenedList = useMemo(() => {
     const pinned: Conversation[] = [];
     const today: Conversation[] = [];
     const yesterday: Conversation[] = [];
@@ -38,33 +44,76 @@ export function ConversationList() {
       }
     });
 
-    return [
-      { label: 'Pinned', items: pinned },
-      { label: 'Today', items: today },
-      { label: 'Yesterday', items: yesterday },
-      { label: 'Previous 7 Days', items: previous7Days },
-      { label: 'Older', items: older },
-    ].filter(g => g.items.length > 0);
+    const list: ListItem[] = [];
+    
+    if (pinned.length > 0) {
+      list.push({ type: 'header', label: 'Pinned' });
+      pinned.forEach(c => list.push({ type: 'item', conversation: c }));
+    }
+    if (today.length > 0) {
+      list.push({ type: 'header', label: 'Today' });
+      today.forEach(c => list.push({ type: 'item', conversation: c }));
+    }
+    if (yesterday.length > 0) {
+      list.push({ type: 'header', label: 'Yesterday' });
+      yesterday.forEach(c => list.push({ type: 'item', conversation: c }));
+    }
+    if (previous7Days.length > 0) {
+      list.push({ type: 'header', label: 'Previous 7 Days' });
+      previous7Days.forEach(c => list.push({ type: 'item', conversation: c }));
+    }
+    if (older.length > 0) {
+      list.push({ type: 'header', label: 'Older' });
+      older.forEach(c => list.push({ type: 'item', conversation: c }));
+    }
+
+    return list;
   }, [filtered]);
 
-  return (
-    <div className="flex-1 overflow-y-auto px-2 pb-4 scroll-smooth">
-      {groups.length === 0 ? (
-        <div className="text-center px-4 py-8 text-[var(--color-text-muted)] text-sm">
-          No conversations found.
+  if (flattenedList.length === 0) {
+    return (
+      <div className="flex-1 text-center px-4 py-8 text-[var(--color-text-muted)] text-sm">
+        No conversations found.
+      </div>
+    );
+  }
+
+  const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+    const item = flattenedList[index];
+
+    if (item.type === 'header') {
+      return (
+        <div style={style} className="flex items-end pb-1 px-3">
+          <h3 className="text-[10px] font-bold text-[var(--color-text-dimmed)] uppercase tracking-widest">
+            {item.label}
+          </h3>
         </div>
-      ) : (
-        groups.map(group => (
-          <div key={group.label} className="mt-4 first:mt-2">
-            <h3 className="px-3 text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-1">
-              {group.label}
-            </h3>
-            {group.items.map(conv => (
-              <ConversationItem key={conv.id} conversation={conv} />
-            ))}
-          </div>
-        ))
-      )}
+      );
+    }
+
+    return (
+      <div style={style} className="px-2">
+        <ConversationItem conversation={item.conversation} />
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex-1 w-full overflow-hidden">
+      <AutoSizer>
+        {({ height, width }: { height: number; width: number }) => (
+          <List
+            height={height}
+            width={width}
+            itemCount={flattenedList.length}
+            itemSize={44} // height of a row
+            className="scrollbar-hide"
+          >
+            {Row}
+          </List>
+        )}
+      </AutoSizer>
     </div>
   );
 }
+

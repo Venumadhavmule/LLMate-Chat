@@ -18,7 +18,7 @@ interface Props {
 
 export const ConversationItem = React.memo(({ conversation }: Props) => {
   const navigate = useNavigate();
-  const { activeConversationId, setActiveConversation, deleteConversation, pinConversation } = useChatStore();
+  const { activeConversationId, deleteConversation, pinConversation } = useChatStore();
 
   const isActive = activeConversationId === conversation.id;
 

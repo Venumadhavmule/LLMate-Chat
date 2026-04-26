@@ -15,35 +15,40 @@ export function SidebarHeader() {
   };
 
   return (
-    <div className={`flex flex-col gap-4 border-b border-[var(--color-border)] shrink-0 ${isSidebarOpen ? 'p-4' : 'p-4 items-center'}`}>
+    <div className={`flex flex-col gap-4 shrink-0 ${isSidebarOpen ? 'p-3' : 'p-3 items-center'}`}>
       <div className={`flex w-full items-center ${isSidebarOpen ? 'justify-between' : 'flex-col gap-4'}`}>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-[var(--radius-sm)] bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-sm">
-            <BrainCircuit className="w-5 h-5 text-white" />
+        {isSidebarOpen && (
+          <div className="flex items-center gap-2 group cursor-pointer ml-1" onClick={() => navigate('/')}>
+            <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/5 group-hover:bg-white/20 transition-colors">
+              <BrainCircuit className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-display font-medium text-sm tracking-tight text-[var(--color-text)]">LLMate</span>
           </div>
-          {isSidebarOpen && <span className="font-display font-semibold text-lg tracking-tight">LLMate</span>}
+        )}
+
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleNewChat}
+            title="New Chat (Cmd+N)"
+            className="text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface)] h-8 w-8"
+          >
+            <Plus size={18} />
+          </Button>
+          
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            aria-label="Toggle Sidebar"
+            title={isSidebarOpen ? "Close sidebar (Cmd+B)" : "Open sidebar (Cmd+B)"}
+            className={`hidden md:flex text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface)] h-8 w-8`}
+          >
+            {isSidebarOpen ? <PanelLeftClose size={18} /> : <PanelLeftOpen size={18} />}
+          </Button>
         </div>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleSidebar}
-          aria-label="Toggle Sidebar"
-          title={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
-          className={`hidden md:flex text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface)] ${isSidebarOpen ? '' : 'w-10 h-10'}`}
-        >
-          {isSidebarOpen ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
-        </Button>
       </div>
-
-      <Button
-        className={`shadow-none border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-border)] text-[var(--color-text)] ${isSidebarOpen ? 'w-full justify-start gap-2 h-10' : 'w-10 h-10 p-0 justify-center'}`}
-        onClick={handleNewChat}
-        title="New Chat"
-      >
-        <Plus size={16} />
-        {isSidebarOpen && "New Chat"}
-      </Button>
     </div>
   );
 }

@@ -13,7 +13,7 @@ export function TopBarActions() {
         size="icon" 
         className="text-[var(--color-text-muted)] hover:text-[var(--color-text)]" 
         onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-        title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        title={theme === 'dark' ? 'Switch to Light Mode (Cmd+Shift+L)' : 'Switch to Dark Mode (Cmd+Shift+L)'}
       >
         {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
       </Button>
@@ -23,7 +23,7 @@ export function TopBarActions() {
       <Button variant="ghost" size="icon" className="hidden sm:flex text-[var(--color-text-muted)] hover:text-[var(--color-text)]" title="Share Chat">
         <Share size={18} />
       </Button>
-      <Button variant="ghost" size="icon" className="text-[var(--color-text-muted)] hover:text-[var(--color-text)]" onClick={() => openModal('settings')} title="Settings">
+      <Button variant="ghost" size="icon" className="text-[var(--color-text-muted)] hover:text-[var(--color-text)]" onClick={() => openModal('settings')} title="Settings (Cmd+,)">
         <Settings size={18} />
       </Button>
     </div>

@@ -24,9 +24,9 @@ export function AssistantMessage({ message, isStreaming, onRegenerate }: Props) 
             "w-8 h-8 rounded-[var(--radius-md)] flex items-center justify-center border",
             isError
               ? "bg-red-500/10 text-red-500 border-red-500/20"
-              : "bg-gradient-to-tr from-violet-600 to-indigo-500 text-white border-transparent shadow-[var(--shadow-glow)]"
+              : "bg-[#10a37f] text-white border-transparent shadow-sm"
           )}>
-            {isError ? <AlertTriangle size={16} /> : <Bot size={16} />}
+            {isError ? <AlertTriangle size={16} /> : <Bot size={18} />}
           </div>
         </div>
 
@@ -34,7 +34,7 @@ export function AssistantMessage({ message, isStreaming, onRegenerate }: Props) 
           <div className="flex flex-col">
             <div className="flex items-center gap-2 mb-1">
               <span className="font-semibold text-sm text-[var(--color-text)]">
-                {message.model || 'LLMate'}
+                {message.model?.startsWith('GPT') ? 'ChatGPT' : (message.model || 'LLMate')}
               </span>
               {message.provider && (
                 <span className="text-[10px] text-[var(--color-text-muted)] bg-[var(--color-surface)] px-1.5 py-0.5 rounded border border-[var(--color-border)] uppercase">
