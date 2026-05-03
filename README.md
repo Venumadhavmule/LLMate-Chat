@@ -1,18 +1,33 @@
 # LLMate Chat
 
 **The frontend for LLMate — talk to any AI model through one interface.**
+ 
+*Official companion to the **[LLMate Gateway](https://github.com/Venumadhavmule/LLMate)** backend.*
 
-A React client that connects to the [LLMate](../LLMate) gateway. Pick a model, type a message, get streaming responses. Supports OpenAI, Anthropic, Google Gemini, Ollama, Groq, and every other provider LLMate supports — all from the same chat window.
+A modern React client designed specifically for the **[LLMate Gateway](https://github.com/Venumadhavmule/LLMate)**. Pick a model, type a message, and get streaming responses. Supports OpenAI, Anthropic, Google Gemini, Ollama, Groq, and every other provider LLMate supports — all from the same unified interface.
 
 ---
 
 ## See It In Action
 
-<!-- Add a screenshot or GIF of the chat interface here -->
-<!-- ![LLMate Chat dark mode](./docs/screenshot-dark.png) -->
-<!-- ![LLMate Chat light mode](./docs/screenshot-light.png) -->
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/llmate-interface-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="./docs/llmate-interface-light.png">
+  <img alt="LLMate Chat Interface" src="./docs/llmate-interface-light.png">
+</picture>
+
+<br/>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/llmate-syntax-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="./docs/llmate-syntax-light.png">
+  <img alt="Markdown Code Rendering" src="./docs/llmate-syntax-light.png">
+</picture>
 
 The interface ships with a dark theme (charcoal + emerald accents) and a light theme (white + violet accents). Theme switching is instant via `Cmd+Shift+L`.
+ 
+> [!IMPORTANT]
+> This frontend requires the **[LLMate Gateway](https://github.com/Venumadhavmule/LLMate)** backend to be running to fetch models and process chat requests.
 
 ---
 
@@ -55,7 +70,7 @@ The interface ships with a dark theme (charcoal + emerald accents) and a light t
 |---------|---------|-------------------------------|
 | Node.js | 18+     | https://nodejs.org            |
 | pnpm    | 8+      | https://pnpm.io               |
-| LLMate  | running | See [LLMate README](../LLMate/README.md) |
+| LLMate  | running | See [LLMate README](https://github.com/Venumadhavmule/LLMate/blob/LLMate/README.md) |
 
 The LLMate Spring Boot backend must be running on `http://localhost:8080` before starting the frontend.
 
@@ -354,4 +369,4 @@ Apache 2.0 — free to use, modify, and redistribute.
 
 ---
 
-*LLMate Chat — the frontend for [LLMate](../LLMate)*
+*LLMate Chat — the frontend for [LLMate](https://github.com/Venumadhavmule/LLMate)*
